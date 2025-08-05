@@ -1,9 +1,7 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
++ /* Tailwind directives obrigatórias */
++ @tailwind base;
++ @tailwind components;
++ @tailwind utilities;
 
 @custom-variant dark (&:is(.dark *));
 
