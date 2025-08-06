@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Removendo "output: 'export'" para habilitar rotas de API
-  // output: "export",
-  // trailingSlash: true,
+  // Mantém o output “export” para gerar a pasta out/,
+  // mas COMO VOCÊ TEM rotas em API, precisamos habilitar o modo híbrido:
+  // - output: 'export' faz a exportação estática
+  // - trailingSlash garante URLs com “/”
+  output: "export",
+  trailingSlash: true,
 
   eslint: {
     ignoreDuringBuilds: true,
@@ -10,20 +13,19 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-
   images: {
     unoptimized: true,
   },
 
-  // Para que o site seja servido em:
-  // https://AngeloSouza1.github.io/portfolio-angelo/
-  basePath: '/portfolio-angelo',
-  assetPrefix: '/portfolio-angelo/',
+  // Para servir em: https://AngeloSouza1.github.io/portfolio-angelo/
+  basePath: "/portfolio-angelo",
+  assetPrefix: "/portfolio-angelo/",
 
-  // expõe o basePath para o cliente
+  // Expõe no cliente
   env: {
-    NEXT_PUBLIC_BASE_PATH: '/portfolio-angelo',
+    NEXT_PUBLIC_BASE_PATH: "/portfolio-angelo",
   },
 };
 
 module.exports = nextConfig;
+
