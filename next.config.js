@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
-  trailingSlash: true,
+  // Removendo "output: 'export'" para habilitar rotas de API
+  // output: "export",
+  // trailingSlash: true,
 
   eslint: {
     ignoreDuringBuilds: true,
@@ -18,7 +19,11 @@ const nextConfig = {
   // https://AngeloSouza1.github.io/portfolio-angelo/
   basePath: '/portfolio-angelo',
   assetPrefix: '/portfolio-angelo/',
+
+  // expõe o basePath para o cliente
+  env: {
+    NEXT_PUBLIC_BASE_PATH: '/portfolio-angelo',
+  },
 };
 
 module.exports = nextConfig;
-

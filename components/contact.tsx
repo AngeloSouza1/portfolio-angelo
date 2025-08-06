@@ -3,12 +3,43 @@
 import { Mail, MapPin } from "lucide-react"
 import { useScrollAnimation, useParallax } from "@/hooks/useScrollAnimation"
 import { useTheme } from "next-themes"
+import { useState } from "react"
+
 
 export function Contact() {
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.1 })
   const parallaxOffset = useParallax()
   const { theme } = useTheme()
+  const [status, setStatus] = useState<"idle"|"sending"|"sent"|"error">("idle")
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setStatus("sending")
+    const form = new FormData(e.currentTarget)
+    const payload = {
+      name:    form.get("name"),
+      email:   form.get("email"),
+      message: form.get("message"),
+    }
+  
+    // obtém o basePath (em dev será vazio, em produção será "/portfolio-angelo")
+    const base = process.env.NEXT_PUBLIC_BASE_PATH || ""
 
+    try {
+      const res = await fetch(`${base}/api/contact`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(payload),
+      })
+      if (!res.ok) throw new Error()
+      e.currentTarget.reset()
+      setStatus("sent")
+      setTimeout(() => setStatus("idle"), 5000)
+    } catch {
+      setStatus("error")
+      setTimeout(() => setStatus("idle"), 5000)
+    }
+  }
   return (
     <section ref={elementRef} id="contato" className="py-20 relative overflow-hidden">
       {/* Ultra-Modern Contact Background */}
@@ -260,14 +291,16 @@ export function Contact() {
                     : "0 30px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.9)",
               }}
             >
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className={`stagger-item ${isVisible ? "visible" : ""}`}>
                   <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                     Nome
                   </label>
                   <input
                     type="text"
+                    name="name"
                     id="name"
+                    required
                     className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700/50 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-500"
                     placeholder="Seu nome"
                   />
@@ -279,7 +312,9 @@ export function Contact() {
                   </label>
                   <input
                     type="email"
+                    name="email"
                     id="email"
+                    required
                     className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700/50 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-500"
                     placeholder="seu@email.com"
                   />
@@ -293,7 +328,9 @@ export function Contact() {
                     Mensagem
                   </label>
                   <textarea
+                    name="message"
                     id="message"
+                    required
                     rows={4}
                     className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700/50 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-500"
                     placeholder="Sua mensagem..."
@@ -301,12 +338,30 @@ export function Contact() {
                 </div>
 
                 <button
-                  type="submit"
-                  className={`w-full bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 text-white py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-600 dark:hover:to-indigo-600 transition-all duration-300 font-medium transform hover:scale-105 hover:shadow-lg stagger-item ${isVisible ? "visible" : ""}`}
-                  style={{ transitionDelay: "0.3s" }}
-                >
-                  Enviar Mensagem
-                </button>
+                    type="submit"
+                    disabled={status === "sending" || status === "sent"}
+                    className={`
+                      w-full
+                      bg-gradient-to-r from-blue-600 to-indigo-600
+                      dark:from-blue-500 dark:to-indigo-500
+                      text-white py-3 rounded-lg
+                      transition-all duration-300 font-medium transform
+                      ${
+                        status === "sending"
+                          ? "opacity-50 cursor-wait"
+                          : status === "sent"
+                          ? "opacity-75 cursor-default"
+                          : "hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-600 dark:hover:to-indigo-600 hover:scale-105 hover:shadow-lg"
+                      }
+                      stagger-item ${isVisible ? "visible" : ""}
+                    `}
+                    style={{ transitionDelay: "0.3s" }}
+                  >
+                    {status === "sending" && "Enviando…"}
+                    {status === "sent"     && "Enviado!"}
+                    {status === "idle"     && "Enviar Mensagem"}
+                  </button>
+
               </form>
             </div>
           </div>
