@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type React from "react"
 import type { Metadata } from "next"
 import { Poppins, IBM_Plex_Sans } from "next/font/google"
@@ -12,9 +13,9 @@ const poppins = Poppins({
   display: "swap",
 })
 
-// Fonte alternativa para código
+// Fonte alternativa para código (agora com subsets especificado)
 const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
+  subsets: ["latin"],       // <-- necessário para habilitar preload
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-ibm-plex",
   display: "swap",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   title: "Angelo Souza - Desenvolvedor Backend",
   description:
     "Desenvolvedor Backend especializado em Ruby on Rails, Python e JavaScript. Graduando em Análise e Desenvolvimento de Sistemas.",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -33,9 +34,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={`scroll-smooth ${poppins.variable} ${ibmPlexSans.variable}`} suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={`scroll-smooth ${poppins.variable} ${ibmPlexSans.variable}`}
+      suppressHydrationWarning
+    >
       <body className={poppins.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
           {children}
         </ThemeProvider>
       </body>

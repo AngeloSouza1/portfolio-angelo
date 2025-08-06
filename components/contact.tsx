@@ -6,40 +6,44 @@ import { useTheme } from "next-themes"
 import { useState } from "react"
 
 
+
 export function Contact() {
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.1 })
   const parallaxOffset = useParallax()
   const { theme } = useTheme()
   const [status, setStatus] = useState<"idle"|"sending"|"sent"|"error">("idle")
+
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setStatus("sending")
-    const form = new FormData(e.currentTarget)
-    const payload = {
-      name:    form.get("name"),
-      email:   form.get("email"),
-      message: form.get("message"),
-    }
-  
-    // obtém o basePath (em dev será vazio, em produção será "/portfolio-angelo")
-    const base = process.env.NEXT_PUBLIC_BASE_PATH || ""
-
+    const form = e.currentTarget
+    const data = new FormData(form)
     try {
-      const res = await fetch(`${base}/api/contact`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(payload),
+      const res = await fetch("https://formspree.io/f/mpwazajq", {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: data
       })
-      if (!res.ok) throw new Error()
-      e.currentTarget.reset()
+      const json = await res.json()
+      if (json.ok === false && json.error) throw new Error(json.error)
+      // se chegou aqui, deu certo:
       setStatus("sent")
-      setTimeout(() => setStatus("idle"), 5000)
-    } catch {
+      form.reset()              // ← limpa os campos
+      setTimeout(() => setStatus("idle"), 3000)
+    } catch (err) {
+      console.error(err)
       setStatus("error")
-      setTimeout(() => setStatus("idle"), 5000)
+      setTimeout(() => setStatus("idle"), 3000)
     }
   }
+
+
+
+
+  
+    // obtém o basePath (em dev será vazio, em produção será "/portfolio-angelo")
+  
   return (
     <section ref={elementRef} id="contato" className="py-20 relative overflow-hidden">
       {/* Ultra-Modern Contact Background */}
@@ -282,87 +286,148 @@ export function Contact() {
               </div>
             </div>
 
+            <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm p-8 rounded-2xl shadow-lg">
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Honeypot anti-spam opcional */}
+          <input type="text" name="_gotcha" style={{ display: "none" }} />
+          <input type="hidden" name="_subject" value="📨 Nova mensagem do Portfólio!!!" />
+         {/* Nome */}
+          <div className="space-y-1">
+            <label htmlFor="name">Nome</label>
             <div
-              className={`bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-700 border border-white/40 dark:border-slate-700/40 section-slide-right ${isVisible ? "visible" : ""}`}
-              style={{
-                boxShadow:
-                  theme === "dark"
-                    ? "0 30px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)"
-                    : "0 30px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.9)",
-              }}
+              className={`
+                rounded-lg p-px
+                ${theme === 'dark'
+                  ? 'bg-gradient-to-r from-blue-400 to-indigo-400'
+                  : 'bg-gradient-to-r from-blue-200 to-cyan-200'}
+              `}
             >
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className={`stagger-item ${isVisible ? "visible" : ""}`}>
-                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                    Nome
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    required
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700/50 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-500"
-                    placeholder="Seu nome"
-                  />
-                </div>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                placeholder="Seu nome"
+                className={`
+                  w-full
+                  bg-white dark:bg-slate-800
+                  rounded-md
+                  px-4 py-3
+                  border-none
+                  focus:outline-none focus:ring-0
+                  transition
+                  ${theme === 'dark'
+                    ? 'shadow-[0_0_10px_rgba(59,130,246,0.7)]'
+                    : 'shadow-[0_0_15px_rgba(96,165,250,0.3)]'
+                  }
+                `}
+              />
+            </div>
+          </div>
 
-                <div className={`stagger-item ${isVisible ? "visible" : ""}`} style={{ transitionDelay: "0.1s" }}>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    required
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700/50 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-500"
-                    placeholder="seu@email.com"
-                  />
-                </div>
+          {/* Email */}
+          <div className="space-y-1">
+            <label htmlFor="email">Email</label>
+            <div
+              className={`
+                rounded-lg p-px
+                ${theme === 'dark'
+                  ? 'bg-gradient-to-r from-blue-400 to-indigo-400'
+                  : 'bg-gradient-to-r from-blue-200 to-cyan-200'}
+              `}
+            >
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="seu@email.com"
+                className={`
+                  w-full
+                  bg-white dark:bg-slate-800
+                  rounded-md
+                  px-4 py-3
+                  border-none
+                  focus:outline-none focus:ring-0
+                  transition
+                  ${theme === 'dark'
+                    ? 'shadow-[0_0_10px_rgba(59,130,246,0.7)]'
+                    : 'shadow-[0_0_15px_rgba(96,165,250,0.3)]'
+                  }
+                `}
+              />
+            </div>
+          </div>
 
-                <div className={`stagger-item ${isVisible ? "visible" : ""}`} style={{ transitionDelay: "0.2s" }}>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
-                  >
-                    Mensagem
-                  </label>
-                  <textarea
-                    name="message"
-                    id="message"
-                    required
-                    rows={4}
-                    className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 dark:bg-slate-700/50 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-500"
-                    placeholder="Sua mensagem..."
-                  ></textarea>
-                </div>
+          {/* Mensagem */}
+          <div className="space-y-1">
+            <label htmlFor="message">Mensagem</label>
+            <div
+              className={`
+                rounded-lg p-px
+                ${theme === 'dark'
+                  ? 'bg-gradient-to-r from-blue-400 to-indigo-400'
+                  : 'bg-gradient-to-r from-blue-200 to-cyan-200'}
+              `}
+            >
+              <textarea
+                id="message"
+                name="message"
+                rows={4}
+                required
+                placeholder="Sua mensagem..."
+                className={`
+                  w-full
+                  bg-white dark:bg-slate-800
+                  rounded-md
+                  px-4 py-3
+                  border-none
+                  focus:outline-none focus:ring-0
+                  transition
+                  ${theme === 'dark'
+                    ? 'shadow-[0_0_10px_rgba(59,130,246,0.7)]'
+                    : 'shadow-[0_0_15px_rgba(96,165,250,0.3)]'
+                  }
+                `}
+              />
+            </div>
+          </div>
 
-                <button
-                    type="submit"
-                    disabled={status === "sending" || status === "sent"}
-                    className={`
-                      w-full
-                      bg-gradient-to-r from-blue-600 to-indigo-600
-                      dark:from-blue-500 dark:to-indigo-500
-                      text-white py-3 rounded-lg
-                      transition-all duration-300 font-medium transform
-                      ${
-                        status === "sending"
-                          ? "opacity-50 cursor-wait"
-                          : status === "sent"
-                          ? "opacity-75 cursor-default"
-                          : "hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-600 dark:hover:to-indigo-600 hover:scale-105 hover:shadow-lg"
-                      }
-                      stagger-item ${isVisible ? "visible" : ""}
-                    `}
-                    style={{ transitionDelay: "0.3s" }}
-                  >
-                    {status === "sending" && "Enviando…"}
-                    {status === "sent"     && "Enviado!"}
-                    {status === "idle"     && "Enviar Mensagem"}
-                  </button>
 
-              </form>
+
+          {/* Feedback de sucesso/erro acima do form */}
+          {status === "sent" && (
+            <div className="mb-4 p-3 bg-green-100 text-green-800 rounded">
+              Mensagem enviada com sucesso!
+            </div>
+          )}
+          {status === "error" && (
+            <div className="mb-4 p-3 bg-red-100 text-red-800 rounded">
+              Ocorreu um erro. Tente novamente.
+            </div>
+          )}
+          
+          {/* Botão */}
+          <button
+            type="submit"
+            disabled={status === "sending" || status === "sent"}
+            className={`
+              w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg
+              ${status === "sending" ? "opacity-50 cursor-wait" : ""}
+              ${status === "sent" ? "opacity-75 cursor-default" : "hover:scale-105 hover:shadow-lg"}
+            `}
+          >
+            {status === "sending" && "Enviando…"}
+            {status === "sent"     && "Enviado!"}
+            {status === "idle"     && "Enviar Mensagem"}
+          </button>
+        </form>
+
+
+
+
+
             </div>
           </div>
         </div>

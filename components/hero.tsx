@@ -213,7 +213,7 @@ export function Hero() {
               className="text-lg text-slate-600 dark:text-slate-300 mb-8 max-w-2xl fade-in-up animate"
               style={{ animationDelay: "0.6s" }}
             >
-              Desenvolvedor Backend especializado em Ruby on Rails, com foco em criar soluções robustas e escaláveis.
+              Desenvolvedor Backend, com foco em criar soluções robustas e escaláveis.
               Graduando em Análise e Desenvolvimento de Sistemas.
             </p>
 

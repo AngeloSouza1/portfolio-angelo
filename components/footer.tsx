@@ -11,7 +11,7 @@ export function Footer() {
             <div>
               <h3 className="text-2xl font-bold mb-4">Angelo Souza</h3>
               <p className="text-slate-300 leading-relaxed">
-                Desenvolvedor Backend especializado em Ruby on Rails, sempre em busca de novos desafios e oportunidades
+                Desenvolvedor Backend, sempre em busca de novos desafios e oportunidades
                 de crescimento.
               </p>
             </div>

@@ -37,6 +37,7 @@ export function Skills() {
         { name: "PostgreSQL", icon: "https://skillicons.dev/icons?i=postgres" },
         { name: "MySQL", icon: "https://skillicons.dev/icons?i=mysql" },
         { name: "SQLite", icon: "https://skillicons.dev/icons?i=sqlite" },
+        { name: "MongoDB",    icon: "https://skillicons.dev/icons?i=mongodb"  },
       ],
     },
     {
@@ -48,6 +49,10 @@ export function Skills() {
         { name: "Docker", icon: "https://skillicons.dev/icons?i=docker" },
         { name: "Postman", icon: "https://skillicons.dev/icons?i=postman" },
         { name: "Figma", icon: "https://skillicons.dev/icons?i=figma" },
+        {
+          name: "DBeaver CE",
+          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/dbeaver/dbeaver-original.svg"
+        },
       ],
     },
   ]

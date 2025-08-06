@@ -159,13 +159,15 @@ export function About() {
             <div className={`space-y-6 cascade-item ${visibleItems[0] ? "visible" : ""}`}>
               <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                 Olá! Meu nome é Angelo Souza, sou Desenvolvedor Backend e Graduando em Análise e Desenvolvimento de
-                Sistemas. Meu objetivo atual é me formar e realizar uma pós-graduação em Go Lang.
+                Sistemas. 
               </p>
 
               <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
-                Minhas tecnologias principais são Ruby e o Framework Rails. Procuro ser sempre uma pessoa educada e
-                respeitosa, e gosto muito de interagir com novas pessoas, compartilhando minha história e aprendendo com
-                as experiências dos outros.
+              Atuo principalmente com Ruby on Rails, mas também possuo experiência com outras linguagens
+              como Python, JavaScript e Kotlin, o que me permite colaborar em projetos diversos e de diferentes
+              naturezas. Valorizo a cordialidade e o respeito nas relações interpessoais, e acredito no poder do
+              diálogo para compartilhar conhecimento, construir conexões significativas e aprender com as experiências
+              de outras pessoas.
               </p>
 
               <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
