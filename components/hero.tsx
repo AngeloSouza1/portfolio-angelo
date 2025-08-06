@@ -218,18 +218,31 @@ export function Hero() {
             </p>
 
             <div
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start fade-in-up animate"
+              className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 justify-center lg:justify-start fade-in-up animate"
               style={{ animationDelay: "0.8s" }}
             >
               <button
-                onClick={() => document.getElementById("projetos")?.scrollIntoView({ behavior: "smooth" })}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-medium transform hover:scale-105 hover:shadow-lg"
+                onClick={() =>
+                  window.dispatchEvent(
+                    new CustomEvent("sectionTransition", { detail: { targetSection: "projetos" } })
+                  )
+                }
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg
+                          hover:from-blue-700 hover:to-indigo-700 transition-all duration-300
+                          font-medium transform hover:scale-105 hover:shadow-lg"
               >
                 Ver Projetos
               </button>
+
               <button
-                onClick={() => document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" })}
-                className="border-2 border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400 px-8 py-3 rounded-lg hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500 transition-all duration-300 font-medium transform hover:scale-105 hover:shadow-lg"
+                onClick={() =>
+                  window.dispatchEvent(
+                    new CustomEvent("sectionTransition", { detail: { targetSection: "contato" } })
+                  )
+                }
+                className="border-2 border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400
+                          px-8 py-3 rounded-lg hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500
+                          transition-all duration-300 font-medium transform hover:scale-105 hover:shadow-lg"
               >
                 Entre em Contato
               </button>
