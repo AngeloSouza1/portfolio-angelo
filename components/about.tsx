@@ -1,16 +1,18 @@
-"use client"
+"use client";
 
 import { useTimedAnimation, useParallax, useFocusAnimation } from "@/hooks/useScrollAnimation"
 import { useTheme } from "next-themes"
 
+
 export function About() {
   const { containerRef, visibleItems } = useTimedAnimation(4, 300, 150)
   const { elementRef: focusRef, isFocused } = useFocusAnimation()
+    
   const parallaxOffset = useParallax()
   const { theme } = useTheme()
 
   return (
-    <section ref={focusRef} id="sobre" className="py-20 relative overflow-hidden">
+    <section ref={focusRef} id="sobre" className="min-h-screen flex flex-col justify-center">
       {/* Organic About Background */}
       <div className="absolute inset-0">
         {/* Layered Gradient Base */}
@@ -150,12 +152,14 @@ export function About() {
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto">
           <h2
-            className={`text-4xl font-bold text-center text-slate-800 dark:text-white mb-12 focus-transition ${isFocused ? "focused" : ""}`}
+           className={`text-4xl font-bold text-center text-slate-800 dark:text-white mb-12 focus-transition ${
+                         isFocused ? "focused" : ""
+                       }`}
           >
             Sobre mim
           </h2>
 
-          <div ref={containerRef} className="grid md:grid-cols-2 gap-12 items-center">
+          <div ref={containerRef} className="grid md:grid-cols-2 gap-12  items-center mt-8 mb-0">
             <div className={`space-y-6 cascade-item ${visibleItems[0] ? "visible" : ""}`}>
               <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                 Olá! Meu nome é Angelo Souza, sou Desenvolvedor Backend e Graduando em Análise e Desenvolvimento de
@@ -185,7 +189,7 @@ export function About() {
                     : "0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5)",
               }}
             >
-              <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-6">Interesses</h3>
+              <h3 className="text-2xl font-bold text-slate-1000 dark:text-white mb-6">Interesses</h3>
               <div className="space-y-4">
                 {[
                   { icon: "☕", text: "Café e inovação" },

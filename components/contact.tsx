@@ -45,7 +45,7 @@ export function Contact() {
     // obtém o basePath (em dev será vazio, em produção será "/portfolio-angelo")
   
   return (
-    <section ref={elementRef} id="contato" className="py-20 relative overflow-hidden">
+    <section ref={elementRef} id="contato" className="py-40 relative overflow-hidden">
       {/* Ultra-Modern Contact Background */}
       <div className="absolute inset-0">
         {/* Sophisticated Gradient Base */}

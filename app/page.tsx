@@ -31,8 +31,8 @@ export default function Home() {
           <Projects />
         </SectionWrapper>
 
-        <SectionWrapper id="contato">
-          <Contact />
+        <SectionWrapper id="contato" className="pb-0">
+        <Contact />
         </SectionWrapper>
       </div>
 
