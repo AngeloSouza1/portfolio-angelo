@@ -37,7 +37,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+    <section  className="py-60 relative overflow-hidden">
       {/* Ultra Advanced Hero Background */}
       <div className="absolute inset-0">
         {/* Dynamic Gradient Base */}

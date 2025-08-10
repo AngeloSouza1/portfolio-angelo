@@ -12,7 +12,7 @@ export function About() {
   const { theme } = useTheme()
 
   return (
-    <section ref={focusRef} id="sobre" className="min-h-screen flex flex-col justify-center">
+    <section ref={focusRef} id="sobre"  className="py-40 relative overflow-hidden">
       {/* Organic About Background */}
       <div className="absolute inset-0">
         {/* Layered Gradient Base */}
