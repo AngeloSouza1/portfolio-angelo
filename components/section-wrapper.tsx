@@ -5,13 +5,14 @@ import { useEffect, useState, useRef } from "react"
 
 interface SectionWrapperProps {
   id: string
-  children: React.ReactNode
+  component: React.ComponentType
   className?: string
 }
 
-export function SectionWrapper({ id, children, className = "" }: SectionWrapperProps) {
+export function SectionWrapper({ id, component: Component, className = "" }: SectionWrapperProps) {
   const [isDissolving, setIsDissolving] = useState(false)
   const [isActive, setIsActive] = useState(id === "hero") // Hero ativo por padrão
+  const [hasBeenActive, setHasBeenActive] = useState(id === "hero")
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -22,6 +23,7 @@ export function SectionWrapper({ id, children, className = "" }: SectionWrapperP
         // Esta é a seção de destino - torna ativa e aplica efeito
         setIsActive(true)
         setIsDissolving(true)
+        setHasBeenActive(true)
 
         setTimeout(() => {
           setIsDissolving(false)
@@ -52,7 +54,7 @@ export function SectionWrapper({ id, children, className = "" }: SectionWrapperP
         transition-all duration-300 ease-out
       `}
     >
-      <div className="w-full">{children}</div>
+      <div className="w-full">{hasBeenActive ? <Component /> : null}</div>
     </section>
   )
 }
