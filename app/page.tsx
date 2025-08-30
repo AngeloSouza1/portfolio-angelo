@@ -5,22 +5,10 @@ import { Hero } from "@/components/hero"
 import { Footer } from "@/components/footer"
 import { ScrollToTop } from "@/components/scroll-to-top"
 
-const About = dynamic(
-  () => import("@/components/about").then((m) => ({ default: m.About })),
-  { ssr: false },
-)
-const Skills = dynamic(
-  () => import("@/components/skills").then((m) => ({ default: m.Skills })),
-  { ssr: false },
-)
-const Projects = dynamic(
-  () => import("@/components/projects").then((m) => ({ default: m.Projects })),
-  { ssr: false },
-)
-const Contact = dynamic(
-  () => import("@/components/contact").then((m) => ({ default: m.Contact })),
-  { ssr: false },
-)
+const About = dynamic(() => import("@/components/about").then((m) => m.About))
+const Skills = dynamic(() => import("@/components/skills").then((m) => m.Skills))
+const Projects = dynamic(() => import("@/components/projects").then((m) => m.Projects))
+const Contact = dynamic(() => import("@/components/contact").then((m) => m.Contact))
 
 export default function Home() {
   return (
@@ -29,15 +17,21 @@ export default function Home() {
 
       {/* Container para seções sobrepostas */}
       <div className="relative min-h-screen">
-        <SectionWrapper id="hero" component={Hero} />
-
-        <SectionWrapper id="sobre" component={About} />
-
-        <SectionWrapper id="habilidades" component={Skills} />
-
-        <SectionWrapper id="projetos" component={Projects} />
-
-        <SectionWrapper id="contato" component={Contact} className="pb-0" />
+        <SectionWrapper id="hero">
+          <Hero />
+        </SectionWrapper>
+        <SectionWrapper id="sobre">
+          <About />
+        </SectionWrapper>
+        <SectionWrapper id="habilidades">
+          <Skills />
+        </SectionWrapper>
+        <SectionWrapper id="projetos">
+          <Projects />
+        </SectionWrapper>
+        <SectionWrapper id="contato" className="pb-0">
+          <Contact />
+        </SectionWrapper>
       </div>
 
       {/* Footer sempre visível */}

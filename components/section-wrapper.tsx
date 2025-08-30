@@ -1,15 +1,15 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, ReactNode } from "react"
 
 interface SectionWrapperProps {
   id: string
-  component: React.ComponentType
+  children: ReactNode
   className?: string
 }
 
-export function SectionWrapper({ id, component: Component, className = "" }: SectionWrapperProps) {
+export function SectionWrapper({ id, children, className = "" }: SectionWrapperProps) {
   const [isDissolving, setIsDissolving] = useState(false)
   const [isActive, setIsActive] = useState(id === "hero") // Hero ativo por padrão
   const [hasBeenActive, setHasBeenActive] = useState(id === "hero")
@@ -54,7 +54,7 @@ export function SectionWrapper({ id, component: Component, className = "" }: Sec
         transition-all duration-300 ease-out
       `}
     >
-      <div className="w-full">{hasBeenActive ? <Component /> : null}</div>
+      <div className="w-full">{hasBeenActive ? children : null}</div>
     </section>
   )
 }
