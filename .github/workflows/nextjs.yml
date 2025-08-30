@@ -46,6 +46,14 @@ jobs:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
 
+      # Instala pnpm se for o gerenciador detectado
+      - name: Setup pnpm
+        if: steps.detect-package-manager.outputs.manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
@@ -65,7 +73,6 @@ jobs:
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
 
-      # Fallback: se a pasta ./out não existir, roda export estático.
       - name: Static HTML export (fallback)
         run: |
           if [ ! -d "out" ]; then
