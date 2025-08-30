@@ -22,13 +22,34 @@ export function Header() {
     setMounted(true)
   }, [])
 
-  const navigateToSection = (sectionId: string) => {
-    // Apenas dispara o evento para efeito dissolve, sem scroll
-    const event = new CustomEvent("sectionTransition", {
+  const navigateToSection = (sectionId: string, event?: React.MouseEvent) => {
+    // Impede o comportamento padrão de scroll
+    event?.preventDefault();
+    
+    // Fecha o menu mobile se estiver aberto
+    setIsMenuOpen(false);
+    
+    // Adiciona classe para evitar scroll durante a transição
+    document.body.style.overflow = 'hidden';
+    
+    // Dispara o evento de transição
+    const transitionEvent = new CustomEvent("sectionTransition", {
       detail: { targetSection: sectionId },
-    })
-    window.dispatchEvent(event)
-    setIsMenuOpen(false)
+    });
+    window.dispatchEvent(transitionEvent);
+    
+    // Rola suavemente para a seção após um pequeno atraso
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Restaura o scroll após a transição
+      setTimeout(() => {
+        document.body.style.overflow = '';
+      }, 1000);
+    }, 50);
   }
 
   return (
@@ -41,12 +62,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           <div
             className="text-2xl font-bold text-slate-800 dark:text-white cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
-            onClick={() => {
-              const event = new CustomEvent("sectionTransition", {
-                detail: { targetSection: "hero" },
-              })
-              window.dispatchEvent(event)
-            }}
+            onClick={(e) => navigateToSection("hero", e)}
           >
             Angelo Souza
           </div>
@@ -56,7 +72,7 @@ export function Header() {
             {["sobre", "habilidades", "projetos", "contato"].map((item) => (
               <button
                 key={item}
-                onClick={() => navigateToSection(item)}
+                onClick={(e) => navigateToSection(item, e)}
                 className="text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 capitalize font-medium"
               >
                 {item === "habilidades" ? "Skills" : item}
@@ -94,7 +110,7 @@ export function Header() {
               {["sobre", "habilidades", "projetos", "contato"].map((item) => (
                 <button
                   key={item}
-                  onClick={() => navigateToSection(item)}
+                  onClick={(e) => navigateToSection(item, e)}
                   className="text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 capitalize font-medium text-left"
                 >
                   {item === "habilidades" ? "Skills" : item}

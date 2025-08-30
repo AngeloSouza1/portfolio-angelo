@@ -35,7 +35,11 @@ export function useSectionTransition() {
     (sectionId: string) => {
       if (state.isTransitioning || state.currentSection === sectionId) return
 
-      // Prevent default scrolling and add overflow hidden
+      // Prevent any current scroll
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
       
       // Clear any existing timeout
@@ -48,12 +52,20 @@ export function useSectionTransition() {
         isTransitioning: true,
         transitionType: "dissolve",
         previousSection: prev.currentSection,
-      }))
+      }));
 
       // Complete transition after animation
       transitionTimeoutRef.current = setTimeout(() => {
-        // Restore overflow after transition
+        // Restore scroll position and styles
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
         document.body.style.overflow = '';
+        
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
         
         setState((prev) => ({
           ...prev,
@@ -62,12 +74,14 @@ export function useSectionTransition() {
           previousSection: null,
         }));
 
-        // Scroll to the top of the new section
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 800) // Match CSS transition duration
+        // Scroll to the section after a small delay to ensure the DOM is updated
+        setTimeout(() => {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 50);
+      }, 1000); // Slightly increased to ensure smooth transition
     },
     [state.isTransitioning, state.currentSection],
   )

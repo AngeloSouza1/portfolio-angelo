@@ -42,17 +42,33 @@ export function SectionWrapper({ id, children, className = "" }: SectionWrapperP
     }
   }, [id])
 
+  // Determina a classe com base no estado da seção
+  const getSectionClass = () => {
+    if (isActive && !isDissolving) return "section-active"
+    if (isDissolving) return "section-enter"
+    return "section-hidden"
+  }
+
   return (
     <section
       ref={sectionRef}
       id={id}
       className={`
         ${className}
-        ${isActive ? "section-active" : "section-hidden"}
-        ${isDissolving ? "section-dissolve-enter" : ""}
+        ${getSectionClass()}
         section-centered
-        transition-all duration-300 ease-out
+        transition-all duration-500 ease-out
       `}
+      style={{
+        position: isActive ? 'relative' : 'absolute',
+        width: '100%',
+        top: 0,
+        left: 0,
+        opacity: isActive ? 1 : 0,
+        pointerEvents: isActive ? 'auto' : 'none',
+        transform: isActive ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'opacity 0.5s ease, transform 0.5s ease',
+      }}
     >
       <div className="w-full">{hasBeenActive ? children : null}</div>
     </section>
