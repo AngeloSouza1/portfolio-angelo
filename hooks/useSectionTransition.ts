@@ -35,6 +35,9 @@ export function useSectionTransition() {
     (sectionId: string) => {
       if (state.isTransitioning || state.currentSection === sectionId) return
 
+      // Prevent default scrolling and add overflow hidden
+      document.body.style.overflow = 'hidden';
+      
       // Clear any existing timeout
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current)
@@ -43,18 +46,27 @@ export function useSectionTransition() {
       setState((prev) => ({
         ...prev,
         isTransitioning: true,
-        transitionType: "dissolve", // Sempre usa dissolve
+        transitionType: "dissolve",
         previousSection: prev.currentSection,
       }))
 
       // Complete transition after animation
       transitionTimeoutRef.current = setTimeout(() => {
+        // Restore overflow after transition
+        document.body.style.overflow = '';
+        
         setState((prev) => ({
           ...prev,
           currentSection: sectionId,
           isTransitioning: false,
           previousSection: null,
-        }))
+        }));
+
+        // Scroll to the top of the new section
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
       }, 800) // Match CSS transition duration
     },
     [state.isTransitioning, state.currentSection],
